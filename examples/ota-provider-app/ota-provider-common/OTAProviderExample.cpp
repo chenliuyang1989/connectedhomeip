@@ -81,7 +81,7 @@ bool GenerateBdxUri(const Span<char> & fileDesignator, Span<char> outUri, size_t
 OTAProviderExample::OTAProviderExample()
 {
     memset(mOTAFilePath, 0, kFilepathBufLen);
-    queryImageBehavior = kRespondWithUpdateAvailable;
+    queryImageBehavior   = kRespondWithUpdateAvailable;
     delayedActionTimeSec = 0;
 }
 
@@ -105,8 +105,8 @@ EmberAfStatus OTAProviderExample::HandleQueryImage(chip::app::CommandHandler * c
     // TODO: add confiuration for returning BUSY status
 
     EmberAfOTAQueryStatus queryStatus = EMBER_ZCL_OTA_QUERY_STATUS_NOT_AVAILABLE;
-    uint32_t softwareVersion      = currentVersion + 1; // This implementation will always indicate that an update is available
-                                                        // (if the user provides a file).
+    uint32_t softwareVersion          = currentVersion + 1; // This implementation will always indicate that an update is available
+                                                            // (if the user provides a file).
     bool userConsentNeeded               = false;
     uint8_t updateToken[kUpdateTokenLen] = { 0 };
     char strBuf[kUpdateTokenStrLen]      = { 0 };
@@ -124,21 +124,23 @@ EmberAfStatus OTAProviderExample::HandleQueryImage(chip::app::CommandHandler * c
     }
 
     // Set Status for the Query Image Response
-    switch(queryImageBehavior) {
-        case kRespondWithUpdateAvailable: {
-            queryStatus = (strlen(mOTAFilePath) ? EMBER_ZCL_OTA_QUERY_STATUS_UPDATE_AVAILABLE : EMBER_ZCL_OTA_QUERY_STATUS_NOT_AVAILABLE);
-            break;
-        }
-        case kRespondWithBusy: {
-            queryStatus = EMBER_ZCL_OTA_QUERY_STATUS_BUSY;
-            break;
-        }
-        case kRespondWithNotAvailable: {
-            queryStatus = EMBER_ZCL_OTA_QUERY_STATUS_NOT_AVAILABLE;
-            break;
-        }
-        default:
-            queryStatus = EMBER_ZCL_OTA_QUERY_STATUS_NOT_AVAILABLE;
+    switch (queryImageBehavior)
+    {
+    case kRespondWithUpdateAvailable: {
+        queryStatus =
+            (strlen(mOTAFilePath) ? EMBER_ZCL_OTA_QUERY_STATUS_UPDATE_AVAILABLE : EMBER_ZCL_OTA_QUERY_STATUS_NOT_AVAILABLE);
+        break;
+    }
+    case kRespondWithBusy: {
+        queryStatus = EMBER_ZCL_OTA_QUERY_STATUS_BUSY;
+        break;
+    }
+    case kRespondWithNotAvailable: {
+        queryStatus = EMBER_ZCL_OTA_QUERY_STATUS_NOT_AVAILABLE;
+        break;
+    }
+    default:
+        queryStatus = EMBER_ZCL_OTA_QUERY_STATUS_NOT_AVAILABLE;
     }
 
     CommandPathParams cmdParams = { emberAfCurrentEndpoint(), 0 /* mGroupId */, ZCL_OTA_PROVIDER_CLUSTER_ID,
